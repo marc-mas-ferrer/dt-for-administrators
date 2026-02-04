@@ -146,10 +146,10 @@
     body_format: json
     status_code: 200
 
-#- include_role:
-#    name: app-unguard
-#  vars:
-#    ingress_protocol: "http"
+- include_role:
+    name: app-unguard
+  vars:
+    ingress_protocol: "http"
 
 - name: Pause for 1 Minute
   ansible.builtin.pause:
