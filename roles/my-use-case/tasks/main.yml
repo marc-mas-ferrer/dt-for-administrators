@@ -10,7 +10,7 @@
     name: dt-access-token
   vars:
     access_token_var_name: "dt_access_token_name"
-    access_token_scope: ["settings.read", "settings.write", "WriteConfig"]
+    access_token_scope: ["settings.read", "settings.write", "WriteConfig", "ExternalSyntheticIntegration"]
 
 # --------------------------------------------------------------------
 # BizEvent ingestion OneAgent feature
@@ -84,11 +84,48 @@
     body_format: json
     status_code: [200, 201]
 
+# --------------------------------------------------------------------
+# Log storage settings - Enable log ingestion
+# --------------------------------------------------------------------
+- name: Get log storage settings object
+  uri:
+    url: "{{ dynatrace_tenant_url }}/api/v2/settings/objects?schemaIds=builtin%3Alogmonitoring.log-storage-settings&scopes=environment&fields=objectId%2C%20value&filter=value.config-item-title%20%3D%20%27%5BBuilt-in%5D%20Ingest%20all%20logs%27&adminAccess=false"
+    method: GET
+    headers:
+      accept: "application/json; charset=utf-8"
+      Authorization: "Api-Token {{ dt_access_token_name }}"
+    return_content: yes
+  register: log_storage_response
+
+- debug:
+    msg: "type: {{ log_storage_response.json.__class__.__name__ }} | content: {{ log_storage_response.json }}"
+
+- debug:
+    msg: "keys: {{ log_storage_response.keys() }}"
+
+- name: Extract log storage object ID
+  set_fact:
+    log_storage_object_id: "{{ log_storage_response.json['items'][0]['objectId'] }}"
+
+- name: Enable log storage ingestion
+  uri:
+    url: "{{ dynatrace_tenant_url }}/api/v2/settings/objects/{{ log_storage_object_id }}"
+    method: PUT
+    headers:
+      accept: "application/json; charset=utf-8"
+      Content-Type: "application/json; charset=utf-8"
+      Authorization: "Api-Token {{ dt_access_token_name }}"
+    body: "{{ lookup('file', role_path + '/files/log_storage_enable.json') }}"
+    body_format: json
+    status_code: [200]
+  register: log_storage_update_result
+
 - include_role:
     name: dt-operator
-#  vars:
-#    operator_mode: "cloudNativeFullStack"  
-#    log_monitoring: "oneagent"
+  vars:
+    operator_mode: "cloudNativeFullStack"
+    log_monitoring: "oneagent"
+    dt_operator_release: "v1.7.3"
 
 - name: Pause for 1 Minute
   ansible.builtin.pause:
@@ -97,10 +134,22 @@
 - include_role:
     name: app-easytrade
 
-- include_role:
-    name: app-unguard
-  vars:
-    ingress_protocol: "http"
+- name: Create HTTP test
+  uri:
+    url: "{{ dynatrace_tenant_url }}/api/v1/synthetic/monitors"
+    method: POST
+    headers:
+      accept: "application/json; charset=utf-8"
+      Content-Type: "application/json; charset=utf-8"
+      Authorization: "Api-Token {{ dt_access_token_name }}"
+    body: "{{ lookup('template', role_path + '/files/http_monitor.json.j2') }}"
+    body_format: json
+    status_code: 200
+
+#- include_role:
+#    name: app-unguard
+#  vars:
+#    ingress_protocol: "http"
 
 - name: Pause for 1 Minute
   ansible.builtin.pause:
