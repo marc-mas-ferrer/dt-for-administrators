@@ -120,6 +120,7 @@
     name: app-unguard
   vars:
     ingress_protocol: "http"
+    unguard_image_tag: "0.13.0"
 
 - name: Pause for 1 Minute
   ansible.builtin.pause:
