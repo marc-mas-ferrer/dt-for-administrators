@@ -116,18 +116,6 @@
 - include_role:
     name: app-easytrade
 
-- name: Create HTTP test
-  uri:
-    url: "{{ dynatrace_tenant_url }}/api/v1/synthetic/monitors"
-    method: POST
-    headers:
-      accept: "application/json; charset=utf-8"
-      Content-Type: "application/json; charset=utf-8"
-      Authorization: "Api-Token {{ dt_access_token_name }}"
-    body: "{{ lookup('template', role_path + '/files/http_monitor.json.j2') }}"
-    body_format: json
-    status_code: 200
-
 - include_role:
     name: app-unguard
   vars:
