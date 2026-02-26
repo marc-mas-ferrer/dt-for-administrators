@@ -1,8 +1,5 @@
 ---
 
-- name: Start log generator script
-  shell: "nohup python3 {{ role_path }}/files/log_generator.py > /tmp/log_generator.log 2>&1 &"
-
 - include_role:
     name: k3s
 
@@ -11,21 +8,6 @@
   vars:
     access_token_var_name: "dt_access_token_name"
     access_token_scope: ["settings.read", "settings.write", "WriteConfig", "ExternalSyntheticIntegration"]
-
-# --------------------------------------------------------------------
-# BizEvent ingestion OneAgent feature
-# --------------------------------------------------------------------
-- name: Configure bizevent ingest
-  uri:
-    url: "{{ dynatrace_tenant_url }}/api/v2/settings/objects"
-    method: POST
-    headers:
-      accept: "application/json"
-      Content-Type: "application/json; charset=utf-8"
-      Authorization: "Api-Token {{ dt_access_token_name }}"
-    body: "{{ lookup('file', role_path + '/files/bizevent_ingest.json') }}"
-    body_format: json
-    status_code: 200
 
 # --------------------------------------------------------------------
 # Creation of Unguard web application
