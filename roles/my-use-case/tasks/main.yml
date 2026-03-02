@@ -10,7 +10,7 @@
     access_token_scope: ["settings.read", "settings.write", "WriteConfig", "ExternalSyntheticIntegration"]
 
 # --------------------------------------------------------------------
-# Runtime Application protection OneAgent feature
+# Enable Runtime Application Protection
 # --------------------------------------------------------------------
 - name: Enable Runtime Application Protection
   uri:
