@@ -1,19 +1,31 @@
 [
-    {
-        "schemaId": "builtin:oneagent.features",
-        "scope": "environment",
-        "value": {
-          "enabled": true,
-          "instrumentation": true,
-          "key": "SENSOR_JAVA_CASP_FLAW_FINDER"
-        }
-    }
-    {
-        "schemaId": "builtin:oneagent.features",
-        "scope": "environment",
-        "value": {
-          "enabled": true,
-          "key": "JAVA_CASP_FLAW_FINDER_HTTP_CLIENT_SINK"
-        }
-    }
+   {
+      "schemaId":"builtin:oneagent.features",
+      "scope":"environment",
+      "value":{
+         "enabled":true,
+         "instrumentation":true,
+         "key":"SENSOR_JAVA_CASP_FLAW_FINDER"
+      }
+   },
+   {
+      "schemaId":"builtin:oneagent.features",
+      "scope":"environment",
+      "value":{
+         "enabled":true,
+         "key":"JAVA_CASP_FLAW_FINDER_HTTP_CLIENT_SINK"
+      }
+   },
+   {
+      "schemaId":"builtin:appsec.attack-protection-settings",
+      "scope":"environment",
+      "value":{
+         "enabled":true,
+         "defaultAttackHandling":{
+            "blockingStrategyJava":"MONITOR",
+            "blockingStrategyDotNet":"OFF",
+            "blockingStrategyGo":"OFF"
+         }
+      }
+   }
 ]
