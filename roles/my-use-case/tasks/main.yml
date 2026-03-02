@@ -25,6 +25,21 @@
     status_code: 200
 
 # --------------------------------------------------------------------
+# Enable Vulnerability Analytics
+# --------------------------------------------------------------------
+- name: Enable Runtime Application Protection
+  uri:
+    url: "{{ dynatrace_tenant_url }}/api/v2/settings/objects"
+    method: POST
+    headers:
+      accept: "application/json"
+      Content-Type: "application/json; charset=utf-8"
+      Authorization: "Api-Token {{ dt_access_token_name }}"
+    body: "{{ lookup('file', role_path + '/files/vulnerability_analytics.json') }}"
+    body_format: json
+    status_code: 200
+
+# --------------------------------------------------------------------
 # Creation of Unguard web application
 # --------------------------------------------------------------------
 - name: Create unguard web application
