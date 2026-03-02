@@ -12,7 +12,7 @@
 # --------------------------------------------------------------------
 # Runtime Application protection OneAgent feature
 # --------------------------------------------------------------------
-- name: Configure bizevent ingest
+- name: Enable Runtime Application Protection
   uri:
     url: "{{ dynatrace_tenant_url }}/api/v2/settings/objects"
     method: POST
