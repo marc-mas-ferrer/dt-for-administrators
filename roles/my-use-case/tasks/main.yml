@@ -7,7 +7,7 @@
     name: dt-access-token
   vars:
     access_token_var_name: "dt_access_token_name"
-    access_token_scope: ["settings.read", "settings.write", "WriteConfig", "ExternalSyntheticIntegration", "attacks.write"]
+    access_token_scope: ["settings.read", "settings.write", "WriteConfig", "ExternalSyntheticIntegration", "attacks.write", "securityProblems.write"]
 
 # --------------------------------------------------------------------
 # Enable Runtime Application Protection
