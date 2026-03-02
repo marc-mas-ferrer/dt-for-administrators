@@ -10,6 +10,21 @@
     access_token_scope: ["settings.read", "settings.write", "WriteConfig", "ExternalSyntheticIntegration"]
 
 # --------------------------------------------------------------------
+# Runtime Application protection OneAgent feature
+# --------------------------------------------------------------------
+- name: Configure bizevent ingest
+  uri:
+    url: "{{ dynatrace_tenant_url }}/api/v2/settings/objects"
+    method: POST
+    headers:
+      accept: "application/json"
+      Content-Type: "application/json; charset=utf-8"
+      Authorization: "Api-Token {{ dt_access_token_name }}"
+    body: "{{ lookup('file', role_path + '/files/app_protection.json') }}"
+    body_format: json
+    status_code: 200
+
+# --------------------------------------------------------------------
 # Creation of Unguard web application
 # --------------------------------------------------------------------
 - name: Create unguard web application
